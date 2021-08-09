@@ -1,0 +1,170 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Maxgat5/UiLib/main/lua"))() -- cal the lib
+local a = library:CreateWindow("Eating Simulator") -- Change to anything
+local b = a:CreateFolder("Auto Farm")
+local c = a:CreateFolder("Auto Buy")
+local e = a:CreateFolder("Visual")
+local f = a:CreateFolder("Credits")
+
+SelectedEggs = ""
+Eggs = {}
+for i,v in pairs(game:GetService("ReplicatedStorage").Eggs:GetChildren()) do
+    table.insert(Eggs,v.Name)
+end
+
+local CoreGui = game:GetService("StarterGui")
+
+local client = game.Players.LocalPlayer
+local char = client.Character
+
+local noclip = false
+local infjumpenabled = false
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if noclip == true then
+        game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+    end
+end)
+
+game:GetService("UserInputService").JumpRequest:Connect(function()
+	if infjumpenabled then
+		game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+	end
+end)
+
+--Main
+
+b:Toggle("Auto Eat", function(Value)
+_G.AutoEat = Value
+while _G.AutoEat do wait()
+for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+      if v.Name == "swing" then
+      game.Players.LocalPlayer.Character.Humanoid:EquipTool(v)
+    end
+    end
+game:GetService'VirtualUser':Button1Down(Vector2.new(1,1))
+end
+end)
+
+b:Toggle("Auto Sell",function(Value)
+_G.AutoSell = Value
+
+while _G.AutoSell do wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(16.686979293823, 11.525447845459, -6.6648082733154) -- Change this teleport to island if u want
+wait(2)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-25.561155319214, -1.3697438240051, -6.9260401725769)
+wait(2)
+end
+end)
+
+--AutoBuy
+
+
+c:Toggle("Auto Buy Food", function(Value)
+_G.AutoFood = Value
+while _G.AutoFood do wait()
+local args = {
+    [1] = "Bats"
+}
+
+game:GetService("ReplicatedStorage").Knit.Services.ShopService.RE.buyAll:FireServer(unpack(args))
+
+    end
+end)
+
+c:Toggle("Auto Buy DNA", function(Value)
+_G.AutoDNA = Value
+while _G.AutoDNA do wait()
+
+local args = {
+    [1] = "DNA"
+}
+
+game:GetService("ReplicatedStorage").Knit.Services.ShopService.RE.buyAll:FireServer(unpack(args))
+
+    end
+end)
+
+c:Toggle("Auto Buy Rank", function(Value)
+_G.AutoRank = Value
+while _G.AutoRank do wait()
+
+local args = {
+    [1] = "Rank"
+}
+
+game:GetService("ReplicatedStorage").Knit.Services.ShopService.RE.buyAll:FireServer(unpack(args))
+
+    end
+end)
+
+c:Dropdown("Selected Eggs", Eggs, function(dd)
+    SelectedEggs = dd
+end)
+
+c:Toggle("Auto Buy Egg", function(Value)
+    _G.AutoEgg = Value
+    while _G.AutoEgg do wait()
+local args = {
+    [1] = SelectedEggs
+}
+
+game:GetService("ReplicatedStorage").Knit.Services.EggService.RF.buy1Egg:InvokeServer(unpack(args))
+end
+end)
+
+
+--Visual
+
+e:Button("FPS Booster", function(value)
+local removedecals = false
+local g = game
+local w = g.Workspace
+local l = g.Lighting
+local t = w.Terrain
+t.WaterWaveSize = 0
+t.WaterWaveSpeed = 0
+t.WaterReflectance = 0
+t.WaterTransparency = 0
+l.GlobalShadows = false
+l.FogEnd = 9e9
+l.Brightness = 0
+settings().Rendering.QualityLevel = "Level01"
+for i, v in pairs(g:GetDescendants()) do
+    if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif v:IsA("Decal") or v:IsA("Texture") and removedecals then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    end
+end
+for i, e in pairs(l:GetChildren()) do
+    if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+        e.Enabled = false
+    end
+end
+end)
+
+--Credits
+
+f:Button("Wechuge#3876",function()
+    setclipboard("Wechuge#3876")
+    CoreGui:SetCore("SendNotification", { Title = "Discord Name"; Text = "Copied To ClipBoard"; Duration = 3; })
+end)
+ 
+f:Button("Discord Server",function()
+    setclipboard("https://discord.gg/K4txdRSVfq")
+    CoreGui:SetCore("SendNotification", { Title = "Discord Server"; Text = "Copied To ClipBoard"; Duration = 3; })
+end)
+
+
